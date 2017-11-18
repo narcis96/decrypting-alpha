@@ -5,9 +5,20 @@ from random import sample, random, randint
 from DNA import DNA
 
 class Population:
-    def __init__(self, count, length, mutationRate, encoded, words):
-        self.__data = [DNA.Random(length, mutationRate, encoded, words) for i in range(count)]
+    def __init__(self, data, count, length, mutationRate, encoded, words):
+        self.__data = data
         self.__matingPool = []
+
+    @classmethod
+    def Random(cls, count, length, mutationRate, encoded, words):
+        data = [DNA.Random(length, mutationRate, encoded, words) for i in range(count)]
+        return cls(data, count, length, mutationRate, encoded, words)
+
+    @classmethod
+    def FromFile(cls, path ,count, length, mutationRate, encoded, words):
+        data = []
+        data = [DNA.FromFile(path + '/' + str(i) + '.txt',length, mutationRate, encoded, words) for i in range(count)]
+        return cls(data, count, length, mutationRate, encoded, words)
 
     def Print(self, generation):
         saveFolder = './generation/' + str(generation)

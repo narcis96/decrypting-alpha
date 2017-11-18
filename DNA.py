@@ -14,6 +14,12 @@ class DNA:
     def Random(cls, length, mutationRate, encoded, words):
         return cls(sample(range(length), length), mutationRate, encoded, words)
 
+    @classmethod
+    def FromFile(cls, path, length, mutationRate, encoded, words):
+        with open(path) as file:
+            data = [int(x) for x in file.read().split()]  # read first line
+        return cls(data, mutationRate, encoded, words)
+
     def __str__(self):
         return ' '.join(str(x) for x in self.__data)
 

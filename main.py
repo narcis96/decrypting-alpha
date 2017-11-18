@@ -36,7 +36,8 @@ if __name__ == '__main__':
         encoded = file.read()[:-1]
     print(encoded)
     print(encoded)
-    population = Population(470, 26, 0.1, encoded, words)
+
+    population = Population.FromFile('./generation/37',470, 26, 0.1, encoded, words, )
     generation = 1
     while True:
         scores = population.CalcFitness()
