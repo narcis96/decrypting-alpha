@@ -1,0 +1,1 @@
+<bound method DNA.decode of <DNA.DNA object at 0x1062dd048>>

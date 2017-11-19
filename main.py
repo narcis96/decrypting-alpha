@@ -19,6 +19,13 @@ def SaveSenteses(path, toFile):
     myFile = open(toFile, 'w')
     for sentence in total:
         print(sentence, file = myFile)
+def decode(encode, path):
+    with open(path) as file:
+        data = [int(x) for x in file.read().split()]  # read first line
+    decoded = ''
+    for value in encoded:
+        decoded = decoded + chr(data[ord(value)- ord('a')] + ord('a'))
+    return  decoded
 
 def ReadFile(file):
     with open(file, 'r') as f:
@@ -35,13 +42,14 @@ if __name__ == '__main__':
     with open('./data/encoded-file.txt', 'r') as file:
         encoded = file.read()[:-1]
     print(encoded)
-    print(encoded)
-
-    population = Population.FromFile('./generation/37',470, 26, 0.1, encoded, words, )
+#    for i in range(470):
+#        print(decode(encoded, './generation/2/' + str(i) + '.txt'))
+#    exit(0)
+    #population = Population.FromFile('./generation/best', 470, 26, 0, encoded, words)
+    population = Population.Random(470, 26, 0.2, encoded, words)
     generation = 1
     while True:
         scores = population.CalcFitness()
         population.Print(generation)
-        population.MatingPool()
         population.NaturalSelection()
         generation = generation + 1

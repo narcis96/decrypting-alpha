@@ -1,5 +1,5 @@
 from random import sample, random, randint
-
+from math import floor
 
 class DNA:
 
@@ -28,26 +28,32 @@ class DNA:
         file.write(str(self))
         file.close()
 
-    def CrossOver(self, fromFirst, other):
+    def CrossOver(self, other):
         data = [0] * len(self.__data)
+        fromFirst = self.__score/ (self.__score + other.GetScore())
         for i,value in enumerate(self.__data):
             if random() < fromFirst:
                 data[i] = value
             else:
                 data[i] = other.__data[i]
-
-            if random() < self.__mutationRate:
-                data[i] = randint(0, len(self.__data))
+        if random() < self.__mutationRate:
+            i = floor(random() * len(data))
+            j = floor(random() * len(data))
+            data[i], data[j] = data[j], data[i]
 
         return DNA(data, self.__mutationRate, self.__encoded, self.__words)
+
+    def decode(self):
+        decoded = ''
+        for value in self.__encoded:
+            decoded = decoded + chr(self.__data[ord(value) - ord('a')] + ord('a'))
+        return decoded
 
     def GetScore(self):
         return self.__score
 
     def CalcFitness(self):
-        decoded = ''
-        for value in self.__encoded:
-            decoded = decoded + chr(self.__data[ord(value)- ord('a')] + ord('a'))
+        decoded = self.decode()
         score = 0
         for word in self.__words:
             if word in decoded:
