@@ -29,12 +29,14 @@ class DNA:
         file.close()
 
     def CrossOver(self, other):
-        data = [0] * len(self.__data)
-        fromFirst = self.__score/ (self.__score + other.GetScore())
+        data = self.__data
+        if (self.__score + other.GetScore()) > 0:
+            fromFirst = self.__score/ (self.__score + other.GetScore())
+        else:
+            fromFirst = 1/2
+#        if random() > fromFirst:
         for i,value in enumerate(self.__data):
-            if random() < fromFirst:
-                data[i] = value
-            else:
+            if random() > fromFirst:
                 data[i] = other.__data[i]
         if random() < self.__mutationRate:
             i = floor(random() * len(data))
@@ -57,5 +59,5 @@ class DNA:
         score = 0
         for word in self.__words:
             if word in decoded:
-                score += 1
-        self.__score = pow(score, 3)
+                score += pow(len(word), 3)
+        self.__score = pow(score, 2)

@@ -41,6 +41,7 @@ class Population:
             if dna.GetScore() == maxScore:
                 print(dna.decode())
                 print(dna.decode(), file=open(saveFolder + '/best.txt', 'w'))
+
                 break
 
     def CalcFitness(self):

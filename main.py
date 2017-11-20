@@ -1,7 +1,12 @@
 from DNA import DNA
 import os, re
-from Population import Population
+import plotly.plotly as py
+import plotly.graph_objs as go
 
+from datetime import datetime
+import pandas_datareader.data as web
+
+from Population import Population
 def UniqueWords(fromFile, toFile):
     with open(fromFile, 'r') as f:
         listWords = [line[:-1] for line in f]
@@ -15,7 +20,7 @@ def SaveSenteses(path, toFile):
         if file.endswith('.r'):
             with open(path + "/" + file, 'r', encoding = 'utf-8', errors='ignore') as content_file:
                 sentences = re.split(r'[!?.]+',content_file.read())
-                total = total + [''.join(list(filter(str.isalpha, str.lower(sentence)))) for sentence in sentences]
+                total = total + [''.join(list(filter(lambda x: str.isalpha(x) or x == ' ', str.lower(sentence)))) for sentence in sentences]
     myFile = open(toFile, 'w')
     for sentence in total:
         print(sentence, file = myFile)
@@ -32,13 +37,26 @@ def ReadFile(file):
         lines = [line[:-1] for line in f]
     return lines
 
+def SaveUniqueWords(sentences, toFile):
+    for sentence in sentences:
+        print(sentence)
+    print(len(sentences))
+    words = set()
+    for sentence in sentences:
+        for word in sentence.split():
+            words.add(word)
+    myFile = open(toFile, 'w')
+    for word in words:
+        print(word, file = myFile)
+
 if __name__ == '__main__':
     #UniqueWords('./data/words-list.txt','./data/words-list-unique.txt')
     #SaveSenteses('./data/Newspapers', './data/sentences.txt')
-    words = ReadFile('./data/words-list-unique.txt')
-    sentences = ReadFile('./data/sentences.txt')
+    #sentences = ReadFile('./data/sentences.txt')
+    #SaveUniqueWords(sentences, './data/words-from-sentences-unique.txt')
+    words = ReadFile('./data/words-from-sentences-unique.txt')
+    words = [word for word in words if len(word) >= 2]
     print(len(words))
-    print(len(sentences))
     with open('./data/encoded-file.txt', 'r') as file:
         encoded = file.read()[:-1]
     print(encoded)
@@ -46,7 +64,7 @@ if __name__ == '__main__':
 #        print(decode(encoded, './generation/2/' + str(i) + '.txt'))
 #    exit(0)
     #population = Population.FromFile('./generation/best', 470, 26, 0, encoded, words)
-    population = Population.Random(470, 26, 0.2, encoded, words)
+    population = Population.Random(1000, 26, 0.01, encoded, words)
     generation = 1
     while True:
         scores = population.CalcFitness()
