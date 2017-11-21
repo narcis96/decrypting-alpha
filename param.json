@@ -2,9 +2,11 @@
     "random" : true,
     "continue": "./generation/best/",
     "print": false,
-    "sentences": "./data/words-from-sentences-unique.txt",
+    "sentences-word-list": "./data/words-from-sentences-unique.txt",
+    "word-list": "./data/words-list-unique.txt",
     "encoded-file": "./data/encoded-file.txt",
-    "population": 100,
+    "hints": "./data/hints.txt",
+    "population": 170,
     "length": 26,
 	"mutation": 0.01
 }

@@ -5,7 +5,7 @@ import json
 #import plotly.graph_objs as go
 #from datetime import datetime
 #import pandas_datareader.data as web
-
+from collections import Counter
 from Population import Population
 def UniqueWords(fromFile, toFile):
     with open(fromFile, 'r') as f:
@@ -38,14 +38,15 @@ def ReadFile(file):
         lines = [line[:-1] for line in f]
     return lines
 
-def SaveUniqueWords(sentences, toFile):
-    for sentence in sentences:
-        print(sentence)
-    print(len(sentences))
-    words = set()
+def GetWords(sentences):
+    words = []
     for sentence in sentences:
         for word in sentence.split():
-            words.add(word)
+            words.append(word)
+    return words
+
+def SaveUniqueWords(sentences, toFile):
+    words = set(GetWords(sentences))
     myFile = open(toFile, 'w')
     for word in words:
         print(word, file = myFile)
@@ -55,27 +56,38 @@ if __name__ == '__main__':
         params = json.load(data_file)
     #UniqueWords('./data/words-list.txt','./data/words-list-unique.txt')
     #SaveSenteses('./data/Newspapers', './data/sentences.txt')
-    #sentences = ReadFile('./data/sentences.txt')
     #SaveUniqueWords(sentences, './data/words-from-sentences-unique.txt')
-    words = ReadFile(params['sentences'])
-    #words2 = ReadFile('./data/words-list-unique.txt')
-    #words = list(set([words + words2]))
-    words = [word for word in words if len(word) >= 3]
+    sentences = ReadFile('./data/sentences.txt')
+    wordList = ReadFile(params['sentences-word-list'])
+    words = ReadFile(params['word-list'])
+    freq = Counter(GetWords(sentences) + words)
+    words = words + wordList
+    words = list(set(words))
+    words = [word for word in words if len(word) >= 2]
+    hints = {}
+    with open(params['hints'], 'r') as f:
+        for line in f:
+            li = line.split()
+            hints[ord(li[0]) - ord('a')] = ord(li[1]) - ord('a')
+    for key in hints:
+        print(chr(key+ord('a')), chr(hints[key]+ord('a')))
     print(len(words))
+
     with open(params['encoded-file'], 'r') as file:
         encoded = file.read()[:-1]
     print(encoded)
-    count = params['population']
-    length = params['length']
     mutation = params['mutation']
+
     if params['random'] == True:
+        count = params['population']
+        length = params['length']
         print('population: ', count)
         print('length: ', length)
         print('mutation: ', mutation)
-        population = Population.Random(count, length, mutation, encoded, words)
+        population = Population.Random(count, length, mutation, encoded, words, freq, hints)
     else:
         print ('continue with folder ', params['continue'])
-        population = Population.FromFolder(params['continue'], count, length, mutation, encoded, words)
+        population = Population.FromFolder(params['continue'], mutation, encoded, words, freq, hints)
     
     while True:
         scores = population.CalcFitness()

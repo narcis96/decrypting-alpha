@@ -1,11 +1,11 @@
-import os
+import os, progressbar
 from math import floor
 import statistics as stats
 from random import sample, random, randint
 from DNA import DNA
-
+BAR_LENGTH = 5
 class Population:
-    def __init__(self, data, mutationRate, encoded, words):
+    def __init__(self, data, mutationRate, encoded, words, freq, hints):
         self.__data = data
         self.__matingPool = []
         self.__generation = 0
@@ -13,19 +13,21 @@ class Population:
         self.__mutationRate = mutationRate
         self.__encoded = encoded
         self.__words = words
+        self.__freq = freq
+        self.__hints = hints
 
     @classmethod
-    def Random(cls, count, length, mutationRate, encoded, words):
-        data = [DNA.Random(length) for i in range(count)]
-        return cls(data, mutationRate, encoded, words)
+    def Random(cls, count, length, mutationRate, encoded, words, freq, hints):
+        data = [DNA.Random(length, hints) for i in range(count)]
+        return cls(data, mutationRate, encoded, words, freq, hints)
 
     @classmethod
-    def FromFolder(cls, path ,count, length, mutationRate, encoded, words):
+    def FromFolder(cls, path, mutationRate, encoded, words, freq, hints):
         data = []
         for file in os.listdir(path):
            if file.endswith('.json'):
                data.append(DNA.ReadFromJson(path + file))
-        return cls(data,  mutationRate, encoded, words)
+        return cls(data,  mutationRate, encoded, words, freq, hints)
 
     def Print(self, printAll):
         average = stats.mean(self.__scores)
@@ -59,8 +61,14 @@ class Population:
         print('generation: ', self.__generation, ' average score : ', average)
 
     def CalcFitness(self):
-        for dna in self.__data:
-            dna.CalcFitness(self.__encoded, self.__words)
+        length = len(self.__data)
+        bar = progressbar.ProgressBar(maxval=length)
+        show = [randint(0, BAR_LENGTH) for i in range(length)]
+        for indx, dna in enumerate(self.__data):
+            dna.CalcFitness(self.__encoded, self.__words, self.__freq)
+            if show[indx] == 0:
+                bar.update(indx + 1)
+        bar.finish()
         self.__scores = [dna.GetScore() for dna in self.__data]
 
     def __PickOne(self, mySum, length):
@@ -80,7 +88,7 @@ class Population:
         for i in range(length):
             parent1 = self.__data[self.__PickOne(mySum, length)]
             parent2 = self.__data[self.__PickOne(mySum, length)]
-            child = parent1.CrossOver(parent2, self.__mutationRate)
+            child = parent1.CrossOver(parent2, self.__mutationRate, self.__hints)
             newGeneration.append(child)
         self.__data =  newGeneration
 
