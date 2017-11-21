@@ -1,0 +1,10 @@
+{
+    "random" : true,
+    "continue": "./generation/best/",
+    "print": false,
+    "sentences": "./data/words-from-sentences-unique.txt",
+    "encoded-file": "./data/encoded-file.txt",
+    "population": 100,
+    "length": 26,
+	"mutation": 0.01
+}

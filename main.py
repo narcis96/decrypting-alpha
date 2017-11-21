@@ -1,10 +1,10 @@
 from DNA import DNA
-import os, re
-import plotly.plotly as py
-import plotly.graph_objs as go
-
-from datetime import datetime
-import pandas_datareader.data as web
+import os, re, sys
+import json
+#import plotly.plotly as py
+#import plotly.graph_objs as go
+#from datetime import datetime
+#import pandas_datareader.data as web
 
 from Population import Population
 def UniqueWords(fromFile, toFile):
@@ -24,6 +24,7 @@ def SaveSenteses(path, toFile):
     myFile = open(toFile, 'w')
     for sentence in total:
         print(sentence, file = myFile)
+    
 def decode(encode, path):
     with open(path) as file:
         data = [int(x) for x in file.read().split()]  # read first line
@@ -50,24 +51,33 @@ def SaveUniqueWords(sentences, toFile):
         print(word, file = myFile)
 
 if __name__ == '__main__':
+    with open('./param.json') as data_file:
+        params = json.load(data_file)
     #UniqueWords('./data/words-list.txt','./data/words-list-unique.txt')
     #SaveSenteses('./data/Newspapers', './data/sentences.txt')
     #sentences = ReadFile('./data/sentences.txt')
     #SaveUniqueWords(sentences, './data/words-from-sentences-unique.txt')
-    words = ReadFile('./data/words-from-sentences-unique.txt')
-    words = [word for word in words if len(word) >= 2]
+    words = ReadFile(params['sentences'])
+    #words2 = ReadFile('./data/words-list-unique.txt')
+    #words = list(set([words + words2]))
+    words = [word for word in words if len(word) >= 3]
     print(len(words))
-    with open('./data/encoded-file.txt', 'r') as file:
+    with open(params['encoded-file'], 'r') as file:
         encoded = file.read()[:-1]
     print(encoded)
-#    for i in range(470):
-#        print(decode(encoded, './generation/2/' + str(i) + '.txt'))
-#    exit(0)
-    #population = Population.FromFile('./generation/best', 470, 26, 0, encoded, words)
-    population = Population.Random(1000, 26, 0.01, encoded, words)
-    generation = 1
+    count = params['population']
+    length = params['length']
+    mutation = params['mutation']
+    if params['random'] == True:
+        print('population: ', count)
+        print('length: ', length)
+        print('mutation: ', mutation)
+        population = Population.Random(count, length, mutation, encoded, words)
+    else:
+        print ('continue with folder ', params['continue'])
+        population = Population.FromFolder(params['continue'], count, length, mutation, encoded, words)
+    
     while True:
         scores = population.CalcFitness()
-        population.Print(generation)
+        population.Print(params['print'])
         population.NaturalSelection()
-        generation = generation + 1

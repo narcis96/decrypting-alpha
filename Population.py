@@ -5,48 +5,62 @@ from random import sample, random, randint
 from DNA import DNA
 
 class Population:
-    def __init__(self, data, count, length, mutationRate, encoded, words):
+    def __init__(self, data, mutationRate, encoded, words):
         self.__data = data
         self.__matingPool = []
+        self.__generation = 0
+        self.__bestScore = 0
+        self.__mutationRate = mutationRate
+        self.__encoded = encoded
+        self.__words = words
 
     @classmethod
     def Random(cls, count, length, mutationRate, encoded, words):
-        data = [DNA.Random(length, mutationRate, encoded, words) for i in range(count)]
-        return cls(data, count, length, mutationRate, encoded, words)
+        data = [DNA.Random(length) for i in range(count)]
+        return cls(data, mutationRate, encoded, words)
 
     @classmethod
-    def FromFile(cls, path ,count, length, mutationRate, encoded, words):
+    def FromFolder(cls, path ,count, length, mutationRate, encoded, words):
         data = []
-        data = [DNA.FromFile(path + '/' + str(i) + '.txt',length, mutationRate, encoded, words) for i in range(count)]
-        return cls(data, count, length, mutationRate, encoded, words)
+        for file in os.listdir(path):
+           if file.endswith('.json'):
+               data.append(DNA.ReadFromJson(path + file))
+        return cls(data,  mutationRate, encoded, words)
 
-    def Print(self, generation):
-        saveFolder = './generation/' + str(generation)
-        os.makedirs(saveFolder, exist_ok = True)
+    def Print(self, printAll):
+        average = stats.mean(self.__scores)
+        maxScore = max(self.__scores)
+        self.__generation = self.__generation + 1
 
-        #scoresFile = open(saveFolder + '/scores.txt', 'w')
-        #for i,dna in enumerate(self.__data):
-        #    print(i, dna.GetScore(), file = scoresFile)
+        os.makedirs('./generation/best/', exist_ok = True)
+        if printAll:
+            saveFolder = './generation/' + str(self.__generation)
+            os.makedirs(saveFolder, exist_ok = True)
+            scoresFile = open(saveFolder + '/scores.txt', 'w')
+            for i,dna in enumerate(self.__data):
+                print(i, dna.GetScore(), file = scoresFile)
+            for i,dna in enumerate(self.__data):
+                dna.WriteJson(saveFolder + '/' + str(i) + '.txt')
+            print(average, file = open(saveFolder + '/average.txt', 'w'))
 
-        for i,dna in enumerate(self.__data):
-            dna.Print(saveFolder + '/' + str(i) + '.txt')
-
-        average = stats.mean([dna.GetScore() for dna in self.__data])
-        maxScore = max(dna.GetScore() for dna in self.__data)
-
-        print(average, file = open(saveFolder + '/average.txt', 'w'))
-        print('generation ', str(generation), ':average score = ', average)
+        if average > self.__bestScore:
+            self.__bestScore = average
+            for i,dna in enumerate(self.__data):
+                dna.WriteJson('./generation/best/' + str(i) + '.json')
 
         for dna  in self.__data:
             if dna.GetScore() == maxScore:
-                print(dna.decode())
-                print(dna.decode(), file=open(saveFolder + '/best.txt', 'w'))
-
+                decoded = dna.decode(self.__encoded)
+                print(decoded)
+                if printAll:
+                    print(decoded, file=open(saveFolder + '/best.txt', 'w'))
                 break
+    
+        print('generation: ', self.__generation, ' average score : ', average)
 
     def CalcFitness(self):
         for dna in self.__data:
-            dna.CalcFitness()
+            dna.CalcFitness(self.__encoded, self.__words)
         self.__scores = [dna.GetScore() for dna in self.__data]
 
     def __PickOne(self, mySum, length):
@@ -66,7 +80,7 @@ class Population:
         for i in range(length):
             parent1 = self.__data[self.__PickOne(mySum, length)]
             parent2 = self.__data[self.__PickOne(mySum, length)]
-            child = parent1.CrossOver(parent2)
+            child = parent1.CrossOver(parent2, self.__mutationRate)
             newGeneration.append(child)
         self.__data =  newGeneration
 
