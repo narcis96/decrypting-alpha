@@ -1,12 +1,15 @@
 {
-    "random" : true,
+    "random" : false,
     "continue": "./generation/best/",
     "print": false,
     "sentences-word-list": "./data/words-from-sentences-unique.txt",
     "word-list": "./data/words-list-unique.txt",
+    "most-1000": "./data/1000-most-used.txt",
+    "most-3000": "./data/3000-most-used.txt",
     "encoded-file": "./data/encoded-file.txt",
     "hints": "./data/hints.txt",
-    "population": 170,
+    "population": 5000,
     "length": 26,
-	"mutation": 0.01
+    "mutation": 0.01,
+    "threads" : 4
 }

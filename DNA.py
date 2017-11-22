@@ -1,20 +1,21 @@
-from random import sample, random, randint
-from math import floor
+import random
+from datetime import datetime
 from argparse import Namespace
 import json
-from  math import log2
+local_random = random.Random()
+local_random.seed(datetime.now())
 class DNA:
     def __init__(self, data, separators):
         self.__data = data
         self.__score = 0
         self.__sep = separators
-        self.__hint = {}
+
     @classmethod
     def Random(cls, length, hints):
         separators = []
         data = []
         values = [x for x in range(length) if x not in hints.values()]
-        values = sample(values,len(values))
+        values = local_random.sample(values,len(values))
         for i in range(length):
             if i not in hints:
                 data.append(values.pop(0))
@@ -63,7 +64,7 @@ class DNA:
 
         elements = 0
         for i in range(n):
-            if (random() > fromFirst and visited[i] == False):
+            if (local_random.random() > fromFirst and visited[i] == False):
                 j = i
                 cycle = [j]
                 while True:
@@ -81,14 +82,14 @@ class DNA:
                 if elements > n * (1-fromFirst):
                     break
 
-
         for i in range(n):
-            if (random() < mutationRate and (i not in hints)):
+            if (local_random.random() < mutationRate and (i not in hints)):
                 while True:
-                    j = floor(random() * len(data))
+                    j = local_random.randint(0, n - 1)
                     if j not in hints:
                         break
                 data[i], data[j] = data[j], data[i]
+            
         separators = []
         return DNA(data, separators)
 
@@ -101,10 +102,10 @@ class DNA:
     def GetScore(self):
         return self.__score
 
-    def CalcFitness(self, encoded, words, freq):
+    def CalcFitness(self, encoded, words):
         decoded = self.decode(encoded)
         score = 0
-        for word in words:
+        for word, coef in words:
             wordLen = len(word)
             if word in decoded:
                 maxScore = len(word)
@@ -113,6 +114,6 @@ class DNA:
                 maxScore = 0
                 #substrings = [decoded[i:i + wordLen] for i in range(length - wordLen + 1)]
                 #maxScore = max(len([i for i, j in zip(substring, decoded) if i == j]) for substring in substrings)
-            #if maxScore > wordLen/2:
-            score += maxScore * log2(freq[word] + 1)
+            if maxScore > wordLen/2:
+                score += maxScore * coef
         self.__score = pow(score, 2)
