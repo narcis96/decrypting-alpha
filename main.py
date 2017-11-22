@@ -1,6 +1,7 @@
 from DNA import DNA
-import os, re, sys
+import os, re, time
 import json
+import numpy as np
 #import plotly.plotly as py
 #import plotly.graph_objs as go
 #from datetime import datetime
@@ -77,15 +78,12 @@ if __name__ == '__main__':
     smallList = ReadFile(params['sentences-word-list'])
     bigList = ReadFile(params['word-list'])
 
-    words = mostused + smallList
-    freq = Counter(words)
-    
-
-    words = list(set(words))
-    words = [word for word in words if len(word) >= 2]
-    scores = [log2(freq[word]+1) for word in words]
-    words = list(zip(words, scores))
-
+    words = mostused + smallList + bigList
+    wordsDict = Counter(words)
+    cost = {}
+    for word in wordsDict:
+        cost[word] = log2(wordsDict[word] + 1)
+        wordsDict[word] = len(word)
     #print(max([val] for i,val in words))
     print(len(words))
 
@@ -96,7 +94,11 @@ if __name__ == '__main__':
     with open(params['encoded-file'], 'r') as file:
         encoded = file.read()[:-1]
     print(encoded)
+    import time
 
+    milliseconds = int(round(time.time()))
+
+    np.random.seed(milliseconds)
     #exit(0)
 
     mutation = params['mutation']
@@ -106,10 +108,10 @@ if __name__ == '__main__':
         print('population: ', count)
         print('length: ', length)
         print('mutation: ', mutation)
-        population = Population.Random(count, length, mutation, encoded, words, hints)
+        population = Population.Random(count, length, mutation, encoded, cost, wordsDict, hints)
     else:
         print ('continue with folder ', params['continue'])
-        population = Population.FromFolder(params['continue'], mutation, encoded, words, hints)
+        population = Population.FromFolder(params['continue'], mutation, encoded, cost, wordsDict, hints)
     
     while True:
         scores = population.CalcFitness(params['threads'])

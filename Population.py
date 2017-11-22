@@ -1,37 +1,37 @@
 import os, progressbar, threading, random
-from datetime import datetime
+import numpy as np
 import statistics as stats
 from DNA import DNA
 BAR_LENGTH = 5
-local_random = random.Random()
-local_random.seed(datetime.now())
-def worker(data, encoded, words):
+
+def worker(data, encoded, cost, wordsDict):
     for dna in data:
-        dna.CalcFitness(encoded, words)
+        dna.CalcFitness(encoded, cost, wordsDict)
 
 class Population:
-    def __init__(self, data, mutationRate, encoded, words, hints):
+    def __init__(self, data, mutationRate, encoded, cost, wordsDict, hints):
         self.__data = data
         self.__matingPool = []
         self.__generation = 0
         self.__bestScore = 0
         self.__mutationRate = mutationRate
         self.__encoded = encoded
-        self.__words = words
+        self.__cost = cost
+        self.__wordsDict = wordsDict
         self.__hints = hints
 
     @classmethod
-    def Random(cls, count, length, mutationRate, encoded, words, hints):
+    def Random(cls, count, length, mutationRate, encoded, cost, wordsDict, hints):
         data = [DNA.Random(length, hints) for i in range(count)]
-        return cls(data, mutationRate, encoded, words, hints)
+        return cls(data, mutationRate, encoded, cost, wordsDict, hints)
 
     @classmethod
-    def FromFolder(cls, path, mutationRate, encoded, words, hints):
+    def FromFolder(cls, path, mutationRate, encoded, cost, wordsDict, hints):
         data = []
         for file in os.listdir(path):
            if file.endswith('.json'):
                data.append(DNA.ReadFromJson(path + file))
-        return cls(data,  mutationRate, encoded, words, hints)
+        return cls(data,  mutationRate, encoded, cost, wordsDict, hints)
 
     def Print(self, printAll):
         average = stats.mean(self.__scores)
@@ -71,7 +71,7 @@ class Population:
         threads = []
         for threadId in range(threadsCount):
             data = [self.__data[i] for i in range(length) if i % threadsCount == threadId]
-            thread = threading.Thread(target=worker, args = (data, self.__encoded, self.__words, ))
+            thread = threading.Thread(target=worker, args = (data, self.__encoded, self.__cost, self.__wordsDict, ))
             threads.append(thread)
             thread.start()
         
@@ -86,7 +86,7 @@ class Population:
 
     def __PickOne(self, mySum, length):
         index = 0
-        value = local_random.random() * mySum
+        value = np.random.rand() * mySum
         while True:
             value -= self.__scores[index]
             if value <= 0:
@@ -96,7 +96,6 @@ class Population:
     def NaturalSelection(self):
         length = len(self.__data)
         mySum = sum(self.__scores)
-        maxScore = max(self.__scores)
         newGeneration = []
         for i in range(length):
             parent1 = self.__data[self.__PickOne(mySum, length)]

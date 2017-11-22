@@ -1,9 +1,7 @@
-import random
-from datetime import datetime
+from  math import  floor
 from argparse import Namespace
 import json
-local_random = random.Random()
-local_random.seed(datetime.now())
+import numpy as np
 class DNA:
     def __init__(self, data, separators):
         self.__data = data
@@ -15,7 +13,7 @@ class DNA:
         separators = []
         data = []
         values = [x for x in range(length) if x not in hints.values()]
-        values = local_random.sample(values,len(values))
+        values = np.random.permutation(values).tolist()
         for i in range(length):
             if i not in hints:
                 data.append(values.pop(0))
@@ -61,10 +59,10 @@ class DNA:
                 exit(-1)
             else:
                 pos[data[i]] = i
-
+        old_score = max(self.__score, other.GetScore())
         elements = 0
         for i in range(n):
-            if (local_random.random() > fromFirst and visited[i] == False):
+            if (np.random.rand() > fromFirst and visited[i] == False):
                 j = i
                 cycle = [j]
                 while True:
@@ -83,9 +81,9 @@ class DNA:
                     break
 
         for i in range(n):
-            if (local_random.random() < mutationRate and (i not in hints)):
+            if (np.random.rand() < mutationRate and (i not in hints)):
                 while True:
-                    j = local_random.randint(0, n - 1)
+                    j = floor(np.random.rand() * n)
                     if j not in hints:
                         break
                 data[i], data[j] = data[j], data[i]
@@ -102,18 +100,12 @@ class DNA:
     def GetScore(self):
         return self.__score
 
-    def CalcFitness(self, encoded, words):
+    def CalcFitness(self, encoded, cost, wordsDict):
         decoded = self.decode(encoded)
         score = 0
-        for word, coef in words:
-            wordLen = len(word)
-            if word in decoded:
-                maxScore = len(word)
-            else:
-                #length = len(decoded)
-                maxScore = 0
-                #substrings = [decoded[i:i + wordLen] for i in range(length - wordLen + 1)]
-                #maxScore = max(len([i for i, j in zip(substring, decoded) if i == j]) for substring in substrings)
-            if maxScore > wordLen/2:
-                score += maxScore * coef
-        self.__score = pow(score, 2)
+        length = len(decoded)
+        substrings = [decoded[i: j + 1] for i in range(length - 1) for j in range(i + 1, min(i + 8,length))]
+        for substring in substrings:
+            if substring in wordsDict:
+                score += wordsDict[substring] * cost[substring]
+        self.__score = pow(score, 4)

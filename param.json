@@ -8,7 +8,7 @@
     "most-3000": "./data/3000-most-used.txt",
     "encoded-file": "./data/encoded-file.txt",
     "hints": "./data/hints.txt",
-    "population": 5000,
+    "population": 1000,
     "length": 26,
     "mutation": 0.01,
     "threads" : 4
