@@ -59,14 +59,16 @@ class DNA:
                 exit(-1)
             else:
                 pos[data[i]] = i
-        old_score = max(self.__score, other.GetScore())
+        perm = np.random.permutation(range(n))
+        #print(n)
         elements = 0
-        for i in range(n):
+        for i in perm:
             if (np.random.rand() > fromFirst and visited[i] == False):
                 j = i
                 cycle = [j]
                 while True:
                     visited[j] = True
+                    #print (j, n, len(other.__data))
                     data[j] = other.__data[j]
                     j = pos[data[j]]
                     elements = elements + 1
@@ -99,8 +101,8 @@ class DNA:
 
     def GetScore(self):
         return self.__score
-
-    def CalcFitness(self, encoded, cost, wordsDict):
+    
+    def CalcFitnessOld(self, encoded, cost, wordsDict):
         decoded = self.decode(encoded)
         score = 0
         length = len(decoded)
@@ -108,4 +110,22 @@ class DNA:
         for substring in substrings:
             if substring in wordsDict:
                 score += wordsDict[substring] * cost[substring]
-        self.__score = pow(score, 4)
+        self.__score = pow(score, 1)
+
+    def CalcFitness(self, encoded, cost, wordsDict):
+        decoded = self.decode(encoded)
+        length = len(decoded)
+        score = 0
+        word = ''
+        for i in range(length):
+            word = word + decoded[i]
+            if word in wordsDict:
+                if wordsDict[word] == 2:
+                    score = i
+                else:
+                    break
+            else:
+                if len(word) == 2:
+                    break
+                word = decoded[i]
+        self.__score = pow(score/(length-1)*100,1)

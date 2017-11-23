@@ -1,6 +1,6 @@
 from DNA import DNA
 import os, re, time
-import json
+import json, time
 import numpy as np
 #import plotly.plotly as py
 #import plotly.graph_objs as go
@@ -77,41 +77,81 @@ if __name__ == '__main__':
     sentences = ReadFile('./data/sentences.txt')
     smallList = ReadFile(params['sentences-word-list'])
     bigList = ReadFile(params['word-list'])
+    hints = GetHints(params['hints'])
+    with open(params['encoded-file'], 'r') as file:
+        encoded = file.readline()[:-1]
+
+    milliseconds = int(round(time.time()))
+    np.random.seed(milliseconds)
+    count = params['population']
+    length = params['length']
+    mutation = params['mutation']
 
     words = mostused + smallList + bigList
+    words = [word for word in words if len(word) >= 3]
     wordsDict = Counter(words)
     cost = {}
+    newDict = {}
     for word in wordsDict:
         cost[word] = log2(wordsDict[word] + 1)
         wordsDict[word] = len(word)
-    #print(max([val] for i,val in words))
-    print(len(words))
+        for i in range(len(word)):
+            newDict[word[0:i+1]] = 1
+    for word in wordsDict:
+        newDict[word] = 2
 
-    hints = GetHints(params['hints'])
     for key in hints:
         print(chr(key+ord('a')), chr(hints[key]+ord('a')))
+    print('encoded text :',encoded)
+    print(len(words), 'words')
+    print('population: ', count)
+    print('length: ', length)
+    print('mutation: ', mutation*100, '%')
 
-    with open(params['encoded-file'], 'r') as file:
-        encoded = file.read()[:-1]
-    print(encoded)
-    import time
+    decoded = 'afaraningelinistit'
+    score = 0
+    length = len(decoded)
+    substrings = [decoded[i: j + 1] for i in range(length - 1) for j in range(i + 1, min(i + 8,length))]
+    for substring in substrings:
+        if substring in wordsDict:
+            score += wordsDict[substring] * cost[substring]
 
-    milliseconds = int(round(time.time()))
+    print('score to rich :',score)
+    print(wordsDict['afara'],cost['afara'])
+    print(wordsDict['ninge'], cost['ninge'])
+    print(wordsDict['linistit'],cost['linistit'])
 
-    np.random.seed(milliseconds)
-    #exit(0)
+    '''
+    wordsDict = newDict
+    #print(max([val] for i,val in words))
+    #decoded = 'ucujuoaoidbaoaesas'
 
-    mutation = params['mutation']
+    length = len(decoded)
+    score = 0
+    word = ''
+    for i in range(length):
+        word = word + decoded[i]
+        print(word)
+        if word in wordsDict:
+            if wordsDict[word] == 2:
+                score = i
+                word = ''
+        else:
+            if wordsDict[word[:-1]] != 2:
+                break
+            word = decoded[i]
+        
+    print('score:',score)
+    print(wordsDict['narcis'])
+    exit(0)
+    '''
+
     if params['random'] == True:
-        count = params['population']
-        length = params['length']
-        print('population: ', count)
-        print('length: ', length)
-        print('mutation: ', mutation)
+        print('Generate ', count, ' random samples')
         population = Population.Random(count, length, mutation, encoded, cost, wordsDict, hints)
     else:
         print ('continue with folder ', params['continue'])
-        population = Population.FromFolder(params['continue'], mutation, encoded, cost, wordsDict, hints)
+        population = Population.FromFolder(params['continue'], count, length, mutation, encoded, cost, wordsDict, hints)
     
     while True:
         scores = population.CalcFitness(params['threads'])

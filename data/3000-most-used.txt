@@ -2940,6 +2940,8 @@ pregatesc
 craciun
 comisiei
 sectorul
+narcis
+ninge
 show
 termenul
 tinem

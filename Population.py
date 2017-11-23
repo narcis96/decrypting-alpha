@@ -6,7 +6,7 @@ BAR_LENGTH = 5
 
 def worker(data, encoded, cost, wordsDict):
     for dna in data:
-        dna.CalcFitness(encoded, cost, wordsDict)
+        dna.CalcFitnessOld(encoded, cost, wordsDict)
 
 class Population:
     def __init__(self, data, mutationRate, encoded, cost, wordsDict, hints):
@@ -26,11 +26,16 @@ class Population:
         return cls(data, mutationRate, encoded, cost, wordsDict, hints)
 
     @classmethod
-    def FromFolder(cls, path, mutationRate, encoded, cost, wordsDict, hints):
+    def FromFolder(cls, path, count, length, mutationRate, encoded, cost, wordsDict, hints):
         data = []
         for file in os.listdir(path):
            if file.endswith('.json'):
                data.append(DNA.ReadFromJson(path + file))
+        print('Loaded ', len(data), 'samples')
+        if len(data) < count:
+            count = count - len(data)
+            print ('Adding ', count, 'random samples...')
+            data = data + [DNA.Random(length, hints) for i in range(count)]
         return cls(data,  mutationRate, encoded, cost, wordsDict, hints)
 
     def Print(self, printAll):
@@ -46,7 +51,7 @@ class Population:
             for i,dna in enumerate(self.__data):
                 print(i, dna.GetScore(), file = scoresFile)
             for i,dna in enumerate(self.__data):
-                dna.WriteJson(saveFolder + '/' + str(i) + '.txt')
+                dna.WriteJson(saveFolder + '/' + str(i) + '.json')
             print(average, file = open(saveFolder + '/average.txt', 'w'))
 
         if average > self.__bestScore:
@@ -54,12 +59,14 @@ class Population:
             for i,dna in enumerate(self.__data):
                 dna.WriteJson('./generation/best/' + str(i) + '.json')
         else:
-            os.system('python3 main.py') #hack
-            exit(0)
+            x = 1
+            #print('Stopped!! Start again...')
+            #os.system('python3 main.py') #hack
+            #exit(0)
         for dna  in self.__data:
             if dna.GetScore() == maxScore:
                 decoded = dna.decode(self.__encoded)
-                print(decoded)
+                print('best match: ',decoded)
                 if printAll:
                     print(decoded, file=open(saveFolder + '/best.txt', 'w'))
                 break

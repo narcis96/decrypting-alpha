@@ -3,4 +3,3 @@ k k
 x x
 w w
 y y
-o a
