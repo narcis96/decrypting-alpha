@@ -1,6 +1,5 @@
 from DNA import DNA
-import os, re, time
-import json, time
+import os, re, time, progressbar, json, itertools
 import numpy as np
 #import plotly.plotly as py
 #import plotly.graph_objs as go
@@ -9,6 +8,7 @@ import numpy as np
 from collections import Counter
 from Population import Population
 from  math import log2
+ALPHA = 'abcdefghijklmnopqstuvwxyz'
 def UniqueWords(fromFile, toFile):
     with open(fromFile, 'r') as f:
         listWords = [line[:-1] for line in f]
@@ -65,6 +65,31 @@ def GetHints(file):
             li = line.split()
             hints[ord(li[0]) - ord('a')] = ord(li[1]) - ord('a')
     return hints
+def CreateDict(words):
+    wordsDict = Counter(words)
+    newDict, newCost, cost = {}, {}, {}
+    print('Creating dict...')
+    bar = progressbar.ProgressBar(maxval=len(wordsDict))
+    for indx,word in enumerate(wordsDict):
+        wordLen, wordCost = len(word), log2(wordsDict[word] + 1)
+        cost[word] = wordCost
+        wordsDict[word] = wordLen
+        for k in range(1, 3):
+            for old in list(itertools.combinations(set(word), k)):
+                for new in list(itertools.combinations([alpha for alpha in ALPHA if alpha not in word], k)):
+                    for j in range(k):
+                        newWord = word.replace(old[j], new[j])
+                        newDict[newWord] = wordLen - k
+                        newCost[newWord] = wordCost
+        bar.update(indx + 1)
+    bar.finish()
+    for word in newDict:
+        if word not in wordsDict:
+            wordsDict[word] = newDict[word]
+            cost[word] = newCost[word]
+    print('dict created...')
+
+    return wordsDict, cost
 
 if __name__ == '__main__':
     with open('./param.json') as data_file:
@@ -79,72 +104,35 @@ if __name__ == '__main__':
     bigList = ReadFile(params['word-list'])
     hints = GetHints(params['hints'])
     with open(params['encoded-file'], 'r') as file:
-        encoded = file.readline()[:-1]
+        encoded = (file.readline()[:-1]).split()
 
     milliseconds = int(round(time.time()))
     np.random.seed(milliseconds)
-    count = params['population']
-    length = params['length']
-    mutation = params['mutation']
+    count, length, mutation = params['population'], params['length'], params['mutation']
 
-    words = mostused + smallList + bigList
+    words = mostused + smallList# + bigList
     words = [word for word in words if len(word) >= 3]
-    wordsDict = Counter(words)
-    cost = {}
-    newDict = {}
-    for word in wordsDict:
-        cost[word] = log2(wordsDict[word] + 1)
-        wordsDict[word] = len(word)
-        for i in range(len(word)):
-            newDict[word[0:i+1]] = 1
-    for word in wordsDict:
-        newDict[word] = 2
+
+    wordsDict, cost = CreateDict(words)
 
     for key in hints:
         print(chr(key+ord('a')), chr(hints[key]+ord('a')))
     print('encoded text :',encoded)
     print(len(words), 'words')
+    print('len(dict)', len(wordsDict))
     print('population: ', count)
     print('length: ', length)
     print('mutation: ', mutation*100, '%')
 
-    decoded = 'afaraningelinistit'
+    decoded = ['afara', 'ninge', 'linistit']
     score = 0
-    length = len(decoded)
-    substrings = [decoded[i: j + 1] for i in range(length - 1) for j in range(i + 1, min(i + 8,length))]
-    for substring in substrings:
-        if substring in wordsDict:
-            score += wordsDict[substring] * cost[substring]
+    for word in decoded:
+        if word in wordsDict:
+            score += wordsDict[word] / len(word)
 
     print('score to rich :',score)
-    print(wordsDict['afara'],cost['afara'])
-    print(wordsDict['ninge'], cost['ninge'])
-    print(wordsDict['linistit'],cost['linistit'])
-
-    '''
-    wordsDict = newDict
-    #print(max([val] for i,val in words))
-    #decoded = 'ucujuoaoidbaoaesas'
-
-    length = len(decoded)
-    score = 0
-    word = ''
-    for i in range(length):
-        word = word + decoded[i]
-        print(word)
-        if word in wordsDict:
-            if wordsDict[word] == 2:
-                score = i
-                word = ''
-        else:
-            if wordsDict[word[:-1]] != 2:
-                break
-            word = decoded[i]
-        
-    print('score:',score)
-    print(wordsDict['narcis'])
-    exit(0)
-    '''
+    for word in decoded:
+        print(wordsDict[word], cost[word])
 
     if params['random'] == True:
         print('Generate ', count, ' random samples')
@@ -155,5 +143,5 @@ if __name__ == '__main__':
     
     while True:
         scores = population.CalcFitness(params['threads'])
-        population.Print(params['print'])
+        population.Print(params['print'], params['save-best'])
         population.NaturalSelection()

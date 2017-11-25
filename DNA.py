@@ -4,7 +4,7 @@ import json
 import numpy as np
 class DNA:
     def __init__(self, data, separators):
-        self.__data = data
+        self.__data = data[:]
         self.__score = 0
         self.__sep = separators
 
@@ -42,14 +42,26 @@ class DNA:
         return ' '.join(str(x) for x in self.__data)
 
     def CrossOver(self, other, mutationRate, hints):
-        data = self.__data
+        n = len(self.__data)
+        data = np.random.permutation(range(n)).tolist()
+        ''''
+        if other.GetScore() > self.__score:
+            for i in range(n):
+                data[i] = other.__data[i]
+        else:
+            for i in range(n):
+                data[i] = self.__data[i]
+
+        '''
+
+        for i in range(n):
+            data[i] = self.__data[i]
 
         if (self.__score + other.GetScore()) > 0:
             fromFirst = self.__score/ (self.__score + other.GetScore())
         else:
             fromFirst = 0.5
 
-        n = len(data)
         visited = [False] * n
         pos = {}
         for i in range(n):
@@ -60,7 +72,6 @@ class DNA:
             else:
                 pos[data[i]] = i
         perm = np.random.permutation(range(n))
-        #print(n)
         elements = 0
         for i in perm:
             if (np.random.rand() > fromFirst and visited[i] == False):
@@ -68,7 +79,6 @@ class DNA:
                 cycle = [j]
                 while True:
                     visited[j] = True
-                    #print (j, n, len(other.__data))
                     data[j] = other.__data[j]
                     j = pos[data[j]]
                     elements = elements + 1
@@ -81,7 +91,6 @@ class DNA:
 
                 if elements > n * (1-fromFirst):
                     break
-
         for i in range(n):
             if (np.random.rand() < mutationRate and (i not in hints)):
                 while True:
@@ -89,43 +98,25 @@ class DNA:
                     if j not in hints:
                         break
                 data[i], data[j] = data[j], data[i]
-            
         separators = []
         return DNA(data, separators)
 
     def decode(self, encoded):
-        decoded = ''
-        for value in encoded:
-            decoded = decoded + chr(self.__data[ord(value) - ord('a')] + ord('a'))
+        decoded = []
+        for word in encoded:
+            newWord = ''
+            for value in word:
+                newWord = newWord + chr(self.__data[ord(value) - ord('a')] + ord('a'))
+            decoded.append(newWord)
         return decoded
 
     def GetScore(self):
         return self.__score
     
-    def CalcFitnessOld(self, encoded, cost, wordsDict):
-        decoded = self.decode(encoded)
+    def CalcFitness(self, encoded, cost, wordsDict):
         score = 0
-        length = len(decoded)
-        substrings = [decoded[i: j + 1] for i in range(length - 1) for j in range(i + 1, min(i + 8,length))]
-        for substring in substrings:
-            if substring in wordsDict:
-                score += wordsDict[substring] * cost[substring]
+        for word in self.decode(encoded):
+            if word in wordsDict:
+                score += wordsDict[word]/len(word)
         self.__score = pow(score, 1)
 
-    def CalcFitness(self, encoded, cost, wordsDict):
-        decoded = self.decode(encoded)
-        length = len(decoded)
-        score = 0
-        word = ''
-        for i in range(length):
-            word = word + decoded[i]
-            if word in wordsDict:
-                if wordsDict[word] == 2:
-                    score = i
-                else:
-                    break
-            else:
-                if len(word) == 2:
-                    break
-                word = decoded[i]
-        self.__score = pow(score/(length-1)*100,1)

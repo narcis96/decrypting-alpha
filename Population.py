@@ -1,4 +1,4 @@
-import os, progressbar, threading, random
+import os, progressbar, threading, random, time
 import numpy as np
 import statistics as stats
 from DNA import DNA
@@ -6,7 +6,7 @@ BAR_LENGTH = 5
 
 def worker(data, encoded, cost, wordsDict):
     for dna in data:
-        dna.CalcFitnessOld(encoded, cost, wordsDict)
+        dna.CalcFitness(encoded, cost, wordsDict)
 
 class Population:
     def __init__(self, data, mutationRate, encoded, cost, wordsDict, hints):
@@ -38,7 +38,7 @@ class Population:
             data = data + [DNA.Random(length, hints) for i in range(count)]
         return cls(data,  mutationRate, encoded, cost, wordsDict, hints)
 
-    def Print(self, printAll):
+    def Print(self, printAll, saveBest):
         average = stats.mean(self.__scores)
         maxScore = max(self.__scores)
         self.__generation = self.__generation + 1
@@ -56,13 +56,10 @@ class Population:
 
         if average > self.__bestScore:
             self.__bestScore = average
-            for i,dna in enumerate(self.__data):
-                dna.WriteJson('./generation/best/' + str(i) + '.json')
-        else:
-            x = 1
-            #print('Stopped!! Start again...')
-            #os.system('python3 main.py') #hack
-            #exit(0)
+            if saveBest:
+                for i,dna in enumerate(self.__data):
+                    dna.WriteJson('./generation/best/' + str(i) + '.json')
+
         for dna  in self.__data:
             if dna.GetScore() == maxScore:
                 decoded = dna.decode(self.__encoded)
@@ -72,8 +69,16 @@ class Population:
                 break
     
         print('generation: ', self.__generation, ' average score : ', average, ' max score: ', max(self.__scores))
-
+        '''
+        print('in Print')
+        for dna in self.__data:
+            print(dna)
+        print('\n')
+        '''
     def CalcFitness(self, threadsCount):
+#        for dna in self.__data:
+ #           dna.CalcFitness(self.__encoded, self.__cost, self.__wordsDict)
+
         length = len(self.__data)
         threads = []
         for threadId in range(threadsCount):
@@ -84,6 +89,7 @@ class Population:
         
         for thread in threads:
             thread.join()
+
         #bar = progressbar.ProgressBar(maxval=length)
         #show = [randint(0, BAR_LENGTH) for i in range(length)]
         #if show[indx] == 0:
@@ -109,5 +115,7 @@ class Population:
             parent2 = self.__data[self.__PickOne(mySum, length)]
             child = parent1.CrossOver(parent2, self.__mutationRate, self.__hints)
             newGeneration.append(child)
-        self.__data =  newGeneration
+
+        self.__data = newGeneration
+
 

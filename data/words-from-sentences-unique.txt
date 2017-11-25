@@ -22,7 +22,6 @@ preocuparilor
 adeverintele
 majoritare
 mor
-cf
 festivitatii
 sacrificii
 transportorul
@@ -234,7 +233,6 @@ pedepsire
 faciu
 seful
 arunc
-caer
 cola
 scurgerea
 construite
@@ -37501,8 +37499,6 @@ minori
 avantajul
 personajului
 colegiului
-scribi
-moned
 dementa
 clarvazator
 semnalata
@@ -37673,7 +37669,6 @@ talibani
 pietre
 intervale
 preajma
-dinu
 pudicului
 strunguri
 cheltuielile
@@ -37929,7 +37924,6 @@ suspectam
 reactionara
 pietoni
 chitait
-prrrr
 piscina
 inregistrarii
 aria
@@ -38250,7 +38244,6 @@ sudanului
 portrete
 efectuata
 plimbat
-sen
 galagia
 francezii
 centrocoop
@@ -38549,6 +38542,7 @@ imbalsamata
 suporter
 masoara
 multiple
+multiplu
 nemiluita
 arestind
 mecanicilor
@@ -39856,7 +39850,6 @@ vrajitori
 reiese
 nevinovata
 ancestrale
-per
 amuzanta
 eroii
 angajatii
@@ -40336,7 +40329,6 @@ servite
 acrit
 curati
 sentintei
-clock
 limbarita
 etnografica
 divortam
@@ -40349,7 +40341,6 @@ misie
 voioasa
 harnici
 sugrumata
-pn
 catastrofei
 caragea
 strazi
