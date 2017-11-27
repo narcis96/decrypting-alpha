@@ -34,13 +34,11 @@ taie
 promovati
 contrabasul
 frizer
-janine
 luminare
 articol
 ferdinand
 matrasit
 redactional
-berechet
 grave
 reziduurile
 tenace
@@ -49,7 +47,6 @@ ocolul
 cronicile
 nepermisa
 vrajitoarelor
-uteciste
 latiniste
 trabant
 batalie
@@ -67,8 +64,6 @@ adaposturi
 arges
 conformeze
 obtinuse
-sterp
-dintr
 stabilite
 coltei
 stamba
@@ -122,13 +117,10 @@ derutati
 paturi
 acoperindu
 succesul
+succesului
 buculei
 bucuriilor
-apanaj
 romantic
-eradica
-dresdner
-exil
 greata
 actualii
 sinucidere
@@ -149,7 +141,6 @@ pacaleli
 camasile
 hulite
 ungureasca
-khomeini
 tuculeanu
 reparat
 dispretuitoare
@@ -187,14 +178,10 @@ sunetele
 adam
 tacla
 pedepsirea
-art
 civicului
 balacarit
 asprele
-moto
 cirmaci
-acuze
-lpf
 profereaza
 tagirta
 procentatorul
@@ -401,7 +388,6 @@ galerii
 maturi
 ramase
 unda
-kiwi
 vietuitoare
 duet
 tratamentelor
@@ -466,7 +452,6 @@ prelevarea
 modestul
 sloveni
 sugestiv
-hobby
 lignitului
 supercupa
 statiunilor
@@ -509,7 +494,7 @@ neplatite
 imorale
 zdrente
 subliniind
-gagiii
+gagii
 nediscriminatoriu
 evitind
 marsuri
@@ -656,7 +641,6 @@ zvonurilor
 fudulitor
 imoral
 harazit
-bolyai
 protejata
 sosete
 vanilie
@@ -942,7 +926,6 @@ ou
 refuzurile
 admire
 institutii
-batu
 vindeau
 traiseram
 privire
@@ -1103,6 +1086,7 @@ impetuos
 devotate
 iepuroaica
 olimpiadei
+olimpiada
 breton
 portarii
 dedesubturile
@@ -1396,7 +1380,6 @@ invitate
 valorificarile
 audierea
 spalator
-lyon
 radare
 moderni
 unison
@@ -1630,7 +1613,6 @@ prezidentialelor
 pacalit
 asocia
 profesorii
-eniko
 neamtului
 decontarea
 rebransarea
@@ -1785,7 +1767,6 @@ acarul
 autostrada
 statii
 mintea
-munck
 rezistentei
 marsaluiau
 supranumit
@@ -1844,7 +1825,6 @@ proprietarului
 vitrinele
 spumele
 ma
-vorkink
 placintar
 valabil
 precizarea
@@ -2319,7 +2299,6 @@ trupul
 pazim
 incoronarea
 ciinelui
-cyrill
 gazduire
 amanunte
 lipovei
@@ -2616,7 +2595,6 @@ antenei
 comodul
 difuza
 defileaza
-tablagiii
 viscolul
 numarate
 grasime
@@ -3137,7 +3115,6 @@ prostilor
 gindacel
 legatura
 romanizat
-cathy
 pistoale
 si
 realizat
@@ -3170,8 +3147,8 @@ sima
 intimplat
 paralizante
 transformari
-ibolya
 pusese
+emisiune
 emisiunea
 vreti
 monopartid
@@ -3715,7 +3692,6 @@ ameninta
 blazon
 fotografierea
 biologica
-air
 englezul
 handicap
 agresiunii
@@ -3731,7 +3707,6 @@ raspindite
 fumul
 pretuit
 concesiunii
-ch
 botosani
 top
 anuntatele
@@ -3912,7 +3887,6 @@ radacinilor
 pinza
 lamentatiei
 cercetati
-fidji
 marsat
 ordinele
 extindere
@@ -4116,8 +4090,6 @@ incalcat
 sensibil
 bateti
 studiul
-groggy
-fler
 pondere
 tranzit
 esenta
@@ -4439,7 +4411,6 @@ glagorie
 labam
 oboseala
 miocardic
-yemenului
 firesc
 invata
 viermuiala
@@ -4718,7 +4689,6 @@ integram
 fortul
 sutind
 chumhuriet
-clay
 eroica
 calimani
 spini
@@ -5120,7 +5090,6 @@ fusesem
 nimic
 prosperi
 proprietati
-copyright
 gottschalk
 malformati
 poluate
@@ -5197,7 +5166,6 @@ copilarit
 william
 invaluit
 parizienii
-sidney
 inchinat
 imprejurarile
 gasiti
@@ -5301,7 +5269,6 @@ trage
 desucheate
 cvorum
 trizechahn
-disney
 pizmuiesc
 destinele
 recenta
@@ -5405,7 +5372,6 @@ ingurgitat
 reapropierea
 tembelitate
 descifrate
-cayman
 corcita
 lan
 parodierea
@@ -5773,10 +5739,8 @@ desantata
 rapoarte
 cintariti
 notiunile
-soma
 tocana
 mail
-izbavire
 incapatinarea
 zapada
 ore
@@ -5802,7 +5766,6 @@ preconizat
 fidejusiune
 indata
 triumviratul
-cocirjat
 inrolam
 pitoresc
 creion
@@ -6040,13 +6003,13 @@ misuna
 socotesc
 bagatori
 scuzele
-beeey
 deliciul
 afecta
 savirsita
 profiturile
 imperiu
 serii
+seria
 chioscarit
 domnisoarele
 egipt
@@ -6061,7 +6024,6 @@ domnitorul
 smuceala
 diminuat
 dominante
-traiiiiiiiti
 studiile
 incatusari
 schiop
@@ -6366,7 +6328,6 @@ citorva
 dezavantajindu
 gistele
 buldozer
-harry
 pustoaicelor
 normalizeze
 paravane
@@ -6387,7 +6348,6 @@ contactat
 dobrescu
 suverana
 incalculabilul
-cnslr
 inchiderii
 bourbon
 robin
@@ -6434,16 +6394,12 @@ militanti
 investitor
 spontan
 pestelui
-sii
 vizibila
 scuipind
 liceului
 alese
-riie
-tilica
 criteriile
 morisca
-munk
 aberatiile
 soarelui
 surescitati
@@ -6640,7 +6596,6 @@ intram
 sobra
 vintu
 elaborata
-greyhound
 ghiciti
 mascariciul
 liderul
@@ -6982,7 +6937,6 @@ portocale
 cirmuitori
 autonomie
 laturilor
-thorez
 relatiile
 furaciunile
 exemplu
@@ -7761,7 +7715,6 @@ englezului
 desteptare
 nameti
 orgoliilor
-fokion
 inaltimi
 necesare
 pajura
@@ -11497,7 +11450,6 @@ esca
 scofilcesc
 muritorii
 geama
-bpr
 travestit
 traducator
 brazilienii
@@ -12596,7 +12548,6 @@ scadeau
 birladul
 renasti
 multimilor
-viii
 pacuraru
 sobei
 avinte
@@ -13092,7 +13043,6 @@ sindicatelor
 scufunda
 hermes
 redactorul
-bodybuilding
 revizuite
 disidenta
 mitului
@@ -13673,13 +13623,11 @@ patachon
 marfurile
 autobuzul
 birfelor
-rkosi
 pretaluieste
 doina
 puzderie
 memorie
 contribuabilii
-gyorgy
 vertical
 cerseasca
 apartina
@@ -16485,7 +16433,6 @@ aflam
 informata
 forfecute
 munti
-joseph
 grosolanie
 incomoda
 inconstienta
@@ -18042,7 +17989,6 @@ tu
 hainelor
 semnificatiile
 menaja
-do
 recitam
 ierta
 escorta
@@ -18053,14 +17999,12 @@ jeturi
 pensionarul
 imbolnavi
 accepte
-jertfi
 arondarea
 proaspete
 sepcuta
 obligati
 nobilului
 traiasca
-zvic
 administratiei
 pius
 imperecherea
@@ -23503,7 +23447,6 @@ demonstrindu
 deontologic
 conceptele
 arsul
-bin
 ajungeau
 populism
 primeste
@@ -26683,9 +26626,7 @@ acreditari
 expertizeaza
 babei
 selectionat
-dejeu
 depunatori
-piine
 civilizata
 scad
 credem
@@ -26978,7 +26919,6 @@ baraca
 bivol
 inmarmuriti
 putrezi
-lyndon
 maghiaro
 cazmaua
 formulez
@@ -27083,7 +27023,6 @@ emana
 programelor
 rinjesc
 repete
-miinii
 laocoon
 criste
 haideti
@@ -27460,7 +27399,6 @@ ascute
 administrata
 numim
 cerebrala
-uliii
 respingerea
 nasit
 nuclear
@@ -28161,8 +28099,7 @@ descreste
 facto
 lupu
 ar
-costinestii
-willy
+costinesti
 venerabilul
 istoriei
 tuciurii
@@ -28232,7 +28169,6 @@ mame
 cumva
 kilograme
 lombrozian
-dres
 nesarata
 pesimismului
 blocarea
@@ -28281,8 +28217,6 @@ rascolit
 inoata
 zimbi
 incuscrirea
-strimba
-for
 anchetat
 scheele
 caramida
@@ -28301,7 +28235,6 @@ subventionat
 mineriada
 asurditati
 basculare
-imgb
 maramuresului
 uite
 fanfaron
@@ -28415,7 +28348,6 @@ urilor
 ciripind
 colimator
 descalifici
-tehno
 implementarii
 guvernamentali
 dezvinovatire
@@ -28439,7 +28371,6 @@ infruntata
 prajesc
 asprime
 bloc
-presley
 criteriilor
 cimpie
 admonesteaza
@@ -29456,7 +29387,6 @@ suprapuna
 redactiile
 simina
 avarie
-henry
 bolnavului
 redobindit
 regimului
@@ -29589,7 +29519,6 @@ psihologic
 semnaleaza
 folosea
 beta
-penalty
 diminetile
 prefata
 recitate
@@ -30570,7 +30499,6 @@ sictir
 degeratu
 bancara
 satisfaca
-beverly
 infrinti
 coacere
 institutionale
@@ -30856,7 +30784,6 @@ participam
 regim
 blondul
 contracaram
-bodyguarzi
 recapitulam
 orfanul
 frecventa
@@ -30866,7 +30793,6 @@ calatorie
 redea
 relansarea
 borcanului
-heny
 berbeleacul
 discutam
 imparatie
@@ -31832,7 +31758,6 @@ familiare
 consolida
 fusta
 abdomenul
-szakvary
 stirii
 exterior
 trebuiau
@@ -31966,7 +31891,6 @@ vamuieste
 suta
 preparate
 reluam
-yoji
 claxon
 crediteze
 rinichi
@@ -32599,7 +32523,6 @@ dezlantuita
 soferii
 filozofului
 zecea
-daily
 tirgovetii
 receptivi
 humanitas
@@ -32843,7 +32766,6 @@ amestecului
 desant
 sri
 europenele
-johnny
 flagrante
 reclama
 orbii
@@ -33322,7 +33244,6 @@ masinarie
 riscul
 perfecteze
 impartasit
-borbely
 dedici
 naravurile
 giovanni
@@ -33751,7 +33672,6 @@ desen
 lucraturile
 substantialul
 cartofilor
-yf
 inflacarate
 masonice
 revigorari
@@ -33811,7 +33731,6 @@ pansament
 pozitive
 dosarelor
 cite
-wesley
 frecau
 hanul
 drame
@@ -33977,7 +33896,6 @@ aruncati
 spectacolul
 atu
 voronin
-jimmy
 mesajul
 dram
 deturna
@@ -34555,7 +34473,6 @@ pina
 panouri
 ghidonul
 licente
-flynt
 indicatorii
 simtite
 palierele
@@ -34638,7 +34555,6 @@ caim
 misculatie
 mediatizeaza
 chitit
-you
 sfarima
 raceasca
 pantofilor
@@ -34647,7 +34563,6 @@ friguroase
 respectau
 celor
 hazoase
-lobby
 vami
 selectionate
 ghivece
@@ -34995,7 +34910,6 @@ stringea
 masivul
 frontiera
 nebunului
-joystick
 ajutind
 cinic
 tragi
@@ -35153,7 +35067,6 @@ pestrit
 condamnatii
 dotata
 seceta
-heavy
 declararii
 oaze
 columbia
@@ -35450,7 +35363,7 @@ alfred
 surle
 conditionat
 benzinar
-traiiiti
+traiti
 ocolisuri
 exemplar
 aura
@@ -35663,7 +35576,6 @@ putregaiul
 proletara
 colectiilor
 lamurit
-pechiney
 permitea
 trece
 relatate
@@ -35709,7 +35621,6 @@ stiinte
 artificiu
 media
 catea
-desailly
 bucuram
 calauzitoare
 chinuit
@@ -35881,7 +35792,6 @@ asteptari
 arhicunoscuta
 imi
 tembela
-harvey
 imagineze
 adunatura
 haiduc
@@ -36894,7 +36804,6 @@ comercializarea
 intirzie
 patetic
 ghicit
-y
 ogoarelor
 deja
 sectoristii
@@ -37492,7 +37401,6 @@ inhaitarea
 stelei
 identificata
 aceleiasi
-micky
 echivaleaza
 secretariatul
 minori
@@ -37528,7 +37436,6 @@ insulta
 mangal
 actiona
 angoasate
-yamamoto
 prosopul
 traversam
 lucratorul
@@ -37590,7 +37497,6 @@ decerna
 hal
 cardul
 paznicii
-beeeey
 tematica
 combinatele
 fiecarei
@@ -37695,7 +37601,6 @@ ascutit
 numitei
 decidem
 piriului
-mickey
 dedice
 cedind
 minie
@@ -39995,7 +39900,6 @@ dovedindu
 unghia
 pastrate
 constitutionalitatii
-yokohama
 acoperitor
 cheltuiesti
 consortiu
@@ -40350,12 +40254,9 @@ proteja
 ciumati
 intocmirii
 clatine
-raapps
 vinzator
 inmarmurirea
 conducem
-pkk
-cowboy
 angajez
 limitate
 economisire
@@ -40753,7 +40654,6 @@ sarituri
 uiti
 transilvania
 comitere
-blegeli
 infrinta
 cerem
 vorbeam

@@ -4,14 +4,12 @@ import json
 import numpy as np
 VOWELS =  'aeiou'
 class DNA:
-    def __init__(self, data, separators):
+    def __init__(self, data):
         self.__data = data[:]
         self.__score = 0
-        self.__sep = separators
 
     @classmethod
     def Random(cls, length, hints):
-        separators = []
         data = []
         values = [x for x in range(length) if x not in hints.values()]
         values = np.random.permutation(values).tolist()
@@ -20,7 +18,7 @@ class DNA:
                 data.append(values.pop(0))
             else:
                 data.append(hints[i])
-        return cls(data, separators)
+        return cls(data)
 
     def __ToJson(self):
         return json.dumps(self, default=lambda o: o.__dict__,  sort_keys=True, indent=4)
@@ -37,14 +35,14 @@ class DNA:
     def ReadFromJson(path):
         with open(path) as data_file:
             param = DNA.json2obj(json.load(data_file))
-        return DNA(param.__data, param.__sep)
+        return DNA(param.__data)
 
     def __str__(self):
         return ' '.join(str(x) for x in self.__data)
 
     def CrossOver(self, other, mutationRate, hints):
         n = len(self.__data)
-        data = np.random.permutation(range(n)).tolist()
+        #data = np.random.permutation(range(n)).tolist()
         ''''
         if other.GetScore() > self.__score:
             for i in range(n):
@@ -55,14 +53,11 @@ class DNA:
 
         '''
         data = self.__data[:]
-        for i in range(n):
-            data[i] = self.__data[i]
-
         if (self.__score + other.GetScore()) > 0:
             fromFirst = self.__score/ (self.__score + other.GetScore())
         else:
             fromFirst = 0.5
-        #fromFirst = 0.5
+        fromFirst = 0.5
         visited = [False] * n
         pos = {}
         for i in range(n):
@@ -73,34 +68,43 @@ class DNA:
             else:
                 pos[data[i]] = i
         perm = np.random.permutation(range(n))
-        elements = 0
+        elements = n*(1-fromFirst)
+        cycles = []
         for i in perm:
-            if (np.random.rand() > fromFirst and visited[i] == False and (data[i] != other.__data[i])):
+            if (visited[i] == False):
                 j = i
-                cycle = [j]
+                cycle = []
                 while True:
                     visited[j] = True
-                    data[j] = other.__data[j]
-                    j = pos[data[j]]
-                    elements = elements + 1
                     cycle.append(j)
+                    j = pos[other.__data[j]]
                     if i == j:
                         break
                     if (elements > n):
                         print('Infinite loop')
                         exit(-1)
-
-                if elements > n * (1-fromFirst):
-                    break
+                if len(cycle) > 1:
+                    cycles.append(cycle)
+        cycles.sort(key = lambda s: len(s))
+        for cycle in cycles:
+            for i in cycle:
+                data[i] = other.__data[i]
+            elements -= len(cycle)
+            if elements <= 0:
+                break
+        child = DNA(data)
+        child.Mutate(mutationRate, hints)
+        return child
+    
+    def Mutate(self, mutationRate, hints):
+        n = len(self.__data)
         for i in range(n):
             if (np.random.rand() < mutationRate and (i not in hints)):
                 while True:
                     j = floor(np.random.rand() * n)
                     if j not in hints:
                         break
-                data[i], data[j] = data[j], data[i]
-        separators = []
-        return DNA(data, separators)
+                self.__data[i], self.__data[j] = self.__data[j], self.__data[i]
 
     def decode(self, encoded):
         decoded = []
@@ -114,9 +118,10 @@ class DNA:
     def GetScore(self):
         return self.__score
 
-    def CalcFitness(self, encoded, cost, wordsDict):
+    def CalcFitness(self, encoded, totalLength, cost, wordsDict, bad, weights):
         score = 0
-        for word in self.decode(encoded):
+        totalLength = sum(len(word) for word in encoded)
+        for i, word in enumerate(self.decode(encoded)):
             exist = False
             for vowel in VOWELS:
                 if vowel in word:
@@ -124,9 +129,11 @@ class DNA:
                     break
             if exist == True:
                 if word in wordsDict:
-                    score += wordsDict[word]/len(word)
+                    score += (wordsDict[word]/len(word))*(len(word)/totalLength)*weights[i]*100
+                else:
+                    score -= bad*(len(word)/totalLength)*weights[i]*100
             else:
                 score = 0
                 break
-        self.__score = pow(score, 2)
+        self.__score = pow(max(0, score), 1)
 

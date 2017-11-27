@@ -21,6 +21,9 @@ class Population:
         self.__hints = hints
         self.__threadPool = ThreadPool(threadsCount)
         self.__threadsCount = threadsCount
+        self.__consecutiveScores = 0
+        self.__lastScore = -1
+        self.__weights = [1 for i in range(len(encoded))]
 
     @classmethod
     def Random(cls, threadsCount, count, length, mutationRate, encoded, cost, wordsDict, hints):
@@ -68,7 +71,7 @@ class Population:
                 print('best match: ',decoded)
                 if printAll:
                     print(decoded, file=open(saveFolder + '/best.txt', 'w'))
-                break
+                #break
     
         print('generation: ', self.__generation, ' average score : ', average, ' max score: ', max(self.__scores),'\n')
         '''
@@ -79,12 +82,12 @@ class Population:
         '''
     def CalcFitness(self):
         startTime = time.time()
+        bad = 0.4
         for dna in self.__data:
-           dna.CalcFitness(self.__encoded, self.__cost, self.__wordsDict)
+           dna.CalcFitness(self.__encoded, len(self.__encoded), self.__cost, self.__wordsDict, bad, self.__weights)
         length = len(self.__data)
 #        self.__threadPool.Start(lambda dna, encoded, cost, wordsDict: dna.CalcFitness(encoded, cost, wordsDict), list(zip(self.__data, [self.__encoded] * length, [self.__cost]*length, [self.__wordsDict]*length)))
  #       self.__threadPool.Join()
-
         '''
         threads = []
         for threadId in range(self.__threadsCount):
@@ -109,8 +112,36 @@ class Population:
         value = np.random.rand() * maxSum
         return bisect.bisect_left(cumulativeSums, value)
 
+    def Stuck(self, maxScore):
+        if maxScore == self.__lastScore:
+            self.__consecutiveScores = self.__consecutiveScores + 1
+        else:
+            self.__consecutiveScores = 1
+        
+        self.__lastScore = maxScore
+        if self.__consecutiveScores == 10:
+           return True
+        return False
+
     def NaturalSelection(self):
         length = len(self.__data)
+        maxScore = max(self.__scores)
+        if self.Stuck(maxScore):
+            for dna in self.__data:
+                if(dna.GetScore() == maxScore):
+                    mutation = 1
+                else:
+                    mutation = 0.5
+                dna.Mutate(mutation, self.__hints)
+            
+            print ('Forced mutations was did...')
+            randNumbers = [np.random.random() for i in range(len(self.__encoded))]
+            randSum = sum(randNumbers)
+            length = len(self.__encoded)
+            for i in range(length):
+                self.__weights[i] = randNumbers[i]/randSum*length
+            return None
+    
         cumulativeSums = np.array(self.__scores).cumsum().tolist()
         maxSum = cumulativeSums[-1]
         newGeneration = []
