@@ -63,7 +63,6 @@ crescut
 intreg
 gasite
 cutelor
-zi
 permite
 proces
 despre
@@ -177,7 +176,6 @@ rezultat
 semn
 aprovizionare
 multumesc
-l
 bland
 vopsea
 cultura
@@ -202,7 +200,7 @@ dumneavoastra
 copii
 poate
 ascutit
-sau,
+sau
 colecta
 de
 cinci
@@ -369,7 +367,6 @@ revendicare
 calificare
 franghie
 bine
-amintiti-va
 ajuta
 mana
 raspunde
@@ -377,7 +374,7 @@ natiune
 atingeti
 fiu
 curs
-Start
+start
 natura
 rata
 trai
@@ -386,7 +383,6 @@ planeta
 munca
 divide
 prin
-s-ar
 luna
 moale
 lui
@@ -469,7 +465,7 @@ segment
 odihna
 secol
 deget
-astfel,
+astfel
 inventa
 schimbare
 quart
@@ -661,7 +657,6 @@ maro
 spalare
 suta
 graba
-mi-
 iarba
 exceptia
 interes
@@ -720,7 +715,6 @@ curte
 roata
 metal
 arunca
-oh
 ferma
 vara
 bumbac
@@ -741,7 +735,7 @@ cravata
 coaja
 carui
 molecula
-asemenea,
+asemenea
 efect
 rapid
 soldat
@@ -831,9 +825,7 @@ gri
 compara
 salbatic
 scrie
-uita-te
 corp
-o
 Cautare
 voce
 familie
@@ -856,7 +848,6 @@ nord
 luat
 grad
 meu
-Știam
 spectacol
 foaie
 cutie

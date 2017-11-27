@@ -17,9 +17,11 @@ pentru
 din
 asta
 ca
+orez
 este
 se
 sunt
+bursa
 care
 sa
 da
@@ -136,7 +138,6 @@ vei
 sigur
 asta
 stai
-oh
 venit
 crezi
 totul
@@ -171,7 +172,6 @@ naiba
 vezi
 nimeni
 peste
-zi
 cea
 ia
 trei
@@ -227,7 +227,6 @@ ziua
 gata
 dle
 viata
-ok
 inapoi
 repede
 omule
@@ -297,7 +296,6 @@ buna
 putut
 sus
 lucruri
-n
 iubesc
 probabil
 tale
@@ -481,6 +479,8 @@ mic
 toti
 corect
 apa
+simplu
+simpli
 fata
 cale
 mana
@@ -490,6 +490,7 @@ telefon
 arata
 incercat
 mod
+romanii
 numarul
 caz
 puteti
@@ -531,7 +532,6 @@ nume
 inima
 ieri
 ramane
-john
 acestea
 auzi
 copiii
@@ -714,7 +714,7 @@ alta
 gasesc
 multa
 pamant
-cã
+ca
 arma
 vada
 luam
@@ -1025,9 +1025,7 @@ telefonul
 intamplat
 bravo
 isi
-b
 cuvinte
-of
 tii
 ocupat
 spunem
@@ -1400,7 +1398,6 @@ cina
 trezit
 veti
 primesc
-johnny
 secunda
 maine
 eddie
@@ -1863,8 +1860,6 @@ sine
 decizie
 viu
 numarul
-mark
-lee
 vizita
 respectiv
 moare
@@ -2096,15 +2091,11 @@ mananc
 prezenta
 kate
 par
-team
-brian
 alexandru
-walter
 iisus
 linistit
 companiei
 patul
-by
 intrati
 secrete
 puteai
@@ -2175,7 +2166,7 @@ ocazie
 padure
 restaurant
 transport
-dacã
+daca
 gheata
 considera
 posibilitatea
@@ -2353,7 +2344,6 @@ regret
 poza
 poza
 medicale
-arthur
 planeta
 costa
 departamentul
@@ -2970,3 +2960,8 @@ formula
 matematica
 informatica
 acasa
+boss
+licenta
+masterat
+suflet
+

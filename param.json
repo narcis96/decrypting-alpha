@@ -1,8 +1,8 @@
 {
-    "random" : false,
+    "random": true,
     "continue": "./generation/best/",
     "print": false,
-    "save-best": true,
+    "save-best": false,
     "sentences-word-list": "./data/words-from-sentences-unique.txt",
     "word-list": "./data/words-list-unique.txt",
     "most-1000": "./data/1000-most-used.txt",
@@ -10,8 +10,8 @@
     "encoded-file": "./data/encoded-file.txt",
     "hints": "./data/hints.txt",
     "debug": false,
-    "population": 7000,
+    "population": 70000,
     "length": 26,
-    "mutation": 0.01,
-    "threads" : 4
+    "mutation": 0.05,
+    "threads": 4
 }

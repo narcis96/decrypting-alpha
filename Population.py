@@ -1,15 +1,15 @@
-import os, progressbar, threading, random, time
+import os, progressbar, threading, random, time, bisect
 import numpy as np
 import statistics as stats
+from thread import ThreadPool
 from DNA import DNA
 BAR_LENGTH = 5
-
 def worker(data, encoded, cost, wordsDict):
     for dna in data:
         dna.CalcFitness(encoded, cost, wordsDict)
 
 class Population:
-    def __init__(self, data, mutationRate, encoded, cost, wordsDict, hints):
+    def __init__(self, threadsCount,data, mutationRate, encoded, cost, wordsDict, hints):
         self.__data = data
         self.__matingPool = []
         self.__generation = 0
@@ -19,14 +19,16 @@ class Population:
         self.__cost = cost
         self.__wordsDict = wordsDict
         self.__hints = hints
+        self.__threadPool = ThreadPool(threadsCount)
+        self.__threadsCount = threadsCount
 
     @classmethod
-    def Random(cls, count, length, mutationRate, encoded, cost, wordsDict, hints):
+    def Random(cls, threadsCount, count, length, mutationRate, encoded, cost, wordsDict, hints):
         data = [DNA.Random(length, hints) for i in range(count)]
-        return cls(data, mutationRate, encoded, cost, wordsDict, hints)
+        return cls(threadsCount, data, mutationRate, encoded, cost, wordsDict, hints)
 
     @classmethod
-    def FromFolder(cls, path, count, length, mutationRate, encoded, cost, wordsDict, hints):
+    def FromFolder(cls, threadsCount, path, count, length, mutationRate, encoded, cost, wordsDict, hints):
         data = []
         for file in os.listdir(path):
            if file.endswith('.json'):
@@ -36,7 +38,7 @@ class Population:
             count = count - len(data)
             print ('Adding ', count, 'random samples...')
             data = data + [DNA.Random(length, hints) for i in range(count)]
-        return cls(data,  mutationRate, encoded, cost, wordsDict, hints)
+        return cls(threadsCount, data,  mutationRate, encoded, cost, wordsDict, hints)
 
     def Print(self, printAll, saveBest):
         average = stats.mean(self.__scores)
@@ -68,52 +70,56 @@ class Population:
                     print(decoded, file=open(saveFolder + '/best.txt', 'w'))
                 break
     
-        print('generation: ', self.__generation, ' average score : ', average, ' max score: ', max(self.__scores))
+        print('generation: ', self.__generation, ' average score : ', average, ' max score: ', max(self.__scores),'\n')
         '''
         print('in Print')
         for dna in self.__data:
             print(dna)
         print('\n')
         '''
-    def CalcFitness(self, threadsCount):
-#        for dna in self.__data:
- #           dna.CalcFitness(self.__encoded, self.__cost, self.__wordsDict)
-
+    def CalcFitness(self):
+        startTime = time.time()
+        for dna in self.__data:
+           dna.CalcFitness(self.__encoded, self.__cost, self.__wordsDict)
         length = len(self.__data)
+#        self.__threadPool.Start(lambda dna, encoded, cost, wordsDict: dna.CalcFitness(encoded, cost, wordsDict), list(zip(self.__data, [self.__encoded] * length, [self.__cost]*length, [self.__wordsDict]*length)))
+ #       self.__threadPool.Join()
+
+        '''
         threads = []
-        for threadId in range(threadsCount):
-            data = [self.__data[i] for i in range(length) if i % threadsCount == threadId]
+        for threadId in range(self.__threadsCount):
+            data = [self.__data[i] for i in range(length) if i % self.__threadsCount == threadId]
             thread = threading.Thread(target=worker, args = (data, self.__encoded, self.__cost, self.__wordsDict, ))
             threads.append(thread)
             thread.start()
         
         for thread in threads:
             thread.join()
-
+        '''
         #bar = progressbar.ProgressBar(maxval=length)
         #show = [randint(0, BAR_LENGTH) for i in range(length)]
         #if show[indx] == 0:
         #   bar.update(indx + 1)
         #bar.finish()
+        print("%s seconds elpased" % (time.time() - startTime))
         self.__scores = [dna.GetScore() for dna in self.__data]
 
-    def __PickOne(self, mySum, length):
+    def __PickOne(self, cumulativeSums, maxSum):
         index = 0
-        value = np.random.rand() * mySum
-        while True:
-            value -= self.__scores[index]
-            if value <= 0:
-                return  index
-            index += 1
+        value = np.random.rand() * maxSum
+        return bisect.bisect_left(cumulativeSums, value)
 
     def NaturalSelection(self):
         length = len(self.__data)
-        mySum = sum(self.__scores)
+        cumulativeSums = np.array(self.__scores).cumsum().tolist()
+        maxSum = cumulativeSums[-1]
         newGeneration = []
+        currentMutation = self.__mutationRate# + (self.__generation/1000)
+        print ('mutation:', currentMutation*100, '%')
         for i in range(length):
-            parent1 = self.__data[self.__PickOne(mySum, length)]
-            parent2 = self.__data[self.__PickOne(mySum, length)]
-            child = parent1.CrossOver(parent2, self.__mutationRate, self.__hints)
+            parent1 = self.__data[self.__PickOne(cumulativeSums, maxSum)]
+            parent2 = self.__data[self.__PickOne(cumulativeSums, maxSum)]
+            child = parent1.CrossOver(parent2, currentMutation, self.__hints)
             newGeneration.append(child)
 
         self.__data = newGeneration

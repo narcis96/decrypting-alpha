@@ -2,6 +2,7 @@ from  math import  floor
 from argparse import Namespace
 import json
 import numpy as np
+VOWELS =  'aeiou'
 class DNA:
     def __init__(self, data, separators):
         self.__data = data[:]
@@ -53,7 +54,7 @@ class DNA:
                 data[i] = self.__data[i]
 
         '''
-
+        data = self.__data[:]
         for i in range(n):
             data[i] = self.__data[i]
 
@@ -61,7 +62,7 @@ class DNA:
             fromFirst = self.__score/ (self.__score + other.GetScore())
         else:
             fromFirst = 0.5
-
+        #fromFirst = 0.5
         visited = [False] * n
         pos = {}
         for i in range(n):
@@ -74,7 +75,7 @@ class DNA:
         perm = np.random.permutation(range(n))
         elements = 0
         for i in perm:
-            if (np.random.rand() > fromFirst and visited[i] == False):
+            if (np.random.rand() > fromFirst and visited[i] == False and (data[i] != other.__data[i])):
                 j = i
                 cycle = [j]
                 while True:
@@ -87,7 +88,7 @@ class DNA:
                         break
                     if (elements > n):
                         print('Infinite loop')
-                        exit(0)
+                        exit(-1)
 
                 if elements > n * (1-fromFirst):
                     break
@@ -112,11 +113,20 @@ class DNA:
 
     def GetScore(self):
         return self.__score
-    
+
     def CalcFitness(self, encoded, cost, wordsDict):
         score = 0
         for word in self.decode(encoded):
-            if word in wordsDict:
-                score += wordsDict[word]/len(word)
-        self.__score = pow(score, 1)
+            exist = False
+            for vowel in VOWELS:
+                if vowel in word:
+                    exist = True
+                    break
+            if exist == True:
+                if word in wordsDict:
+                    score += wordsDict[word]/len(word)
+            else:
+                score = 0
+                break
+        self.__score = pow(score, 2)
 
