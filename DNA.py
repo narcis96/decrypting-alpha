@@ -57,7 +57,6 @@ class DNA:
             fromFirst = self.__score/ (self.__score + other.GetScore())
         else:
             fromFirst = 0.5
-        fromFirst = 0.5
         visited = [False] * n
         pos = {}
         for i in range(n):
@@ -118,7 +117,7 @@ class DNA:
     def GetScore(self):
         return self.__score
 
-    def CalcFitness(self, encoded, totalLength, cost, wordsDict, bad, weights):
+    def CalcFitness(self, encoded, wordsDict, bad, weights):
         score = 0
         totalLength = sum(len(word) for word in encoded)
         for i, word in enumerate(self.decode(encoded)):

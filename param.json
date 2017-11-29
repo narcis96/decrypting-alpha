@@ -13,6 +13,6 @@
     "debug": false,
     "population": 5000,
     "length": 26,
-    "mutation": 0.04,
+    "mutation": 0.02,
     "threads": 4
 }

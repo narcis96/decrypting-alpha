@@ -4,19 +4,18 @@ import statistics as stats
 from thread import ThreadPool
 from DNA import DNA
 BAR_LENGTH = 5
-def worker(data, encoded, cost, wordsDict):
+def worker(data, encoded, wordsDict):
     for dna in data:
-        dna.CalcFitness(encoded, cost, wordsDict)
+        dna.CalcFitness(encoded, wordsDict)
 
 class Population:
-    def __init__(self, threadsCount,data, mutationRate, encoded, cost, wordsDict, hints):
+    def __init__(self, threadsCount,data, mutationRate, encoded, wordsDict, hints):
         self.__data = data
         self.__matingPool = []
         self.__generation = 0
         self.__bestScore = 0
         self.__mutationRate = mutationRate
         self.__encoded = encoded
-        self.__cost = cost
         self.__wordsDict = wordsDict
         self.__hints = hints
         self.__threadPool = ThreadPool(threadsCount)
@@ -26,12 +25,12 @@ class Population:
         self.__weights = [1 for i in range(len(encoded))]
 
     @classmethod
-    def Random(cls, threadsCount, count, length, mutationRate, encoded, cost, wordsDict, hints):
+    def Random(cls, threadsCount, count, length, mutationRate, encoded, wordsDict, hints):
         data = [DNA.Random(length, hints) for i in range(count)]
-        return cls(threadsCount, data, mutationRate, encoded, cost, wordsDict, hints)
+        return cls(threadsCount, data, mutationRate, encoded, wordsDict, hints)
 
     @classmethod
-    def FromFolder(cls, threadsCount, path, count, length, mutationRate, encoded, cost, wordsDict, hints):
+    def FromFolder(cls, threadsCount, path, count, length, mutationRate, encoded, wordsDict, hints):
         data = []
         for file in os.listdir(path):
            if file.endswith('.json'):
@@ -41,7 +40,7 @@ class Population:
             count = count - len(data)
             print ('Adding ', count, 'random samples...')
             data = data + [DNA.Random(length, hints) for i in range(count)]
-        return cls(threadsCount, data,  mutationRate, encoded, cost, wordsDict, hints)
+        return cls(threadsCount, data,  mutationRate, encoded, wordsDict, hints)
 
     def Print(self, printAll, saveBest):
         average = stats.mean(self.__scores)
@@ -84,21 +83,21 @@ class Population:
         startTime = time.time()
         bad = 0.4
         for dna in self.__data:
-           dna.CalcFitness(self.__encoded, len(self.__encoded), self.__cost, self.__wordsDict, bad, self.__weights)
+           dna.CalcFitness(self.__encoded, self.__wordsDict, bad, self.__weights)
         length = len(self.__data)
-#        self.__threadPool.Start(lambda dna, encoded, cost, wordsDict: dna.CalcFitness(encoded, cost, wordsDict), list(zip(self.__data, [self.__encoded] * length, [self.__cost]*length, [self.__wordsDict]*length)))
+#        self.__threadPool.Start(lambda dna, encoded, wordsDict: dna.CalcFitness(encoded, wordsDict), list(zip(self.__data, [self.__encoded] * length, [self.__cost]*length, [self.__wordsDict]*length)))
  #       self.__threadPool.Join()
         '''
         threads = []
         for threadId in range(self.__threadsCount):
             data = [self.__data[i] for i in range(length) if i % self.__threadsCount == threadId]
-            thread = threading.Thread(target=worker, args = (data, self.__encoded, self.__cost, self.__wordsDict, ))
+            thread = threading.Thread(target=worker, args = (data, self.__encoded, self.__wordsDict, bad, self.__weights, ))
             threads.append(thread)
             thread.start()
         
         for thread in threads:
             thread.join()
-        '''
+        '''        
         #bar = progressbar.ProgressBar(maxval=length)
         #show = [randint(0, BAR_LENGTH) for i in range(length)]
         #if show[indx] == 0:
@@ -129,7 +128,7 @@ class Population:
         if self.Stuck(maxScore):
             for dna in self.__data:
                 if(dna.GetScore() == maxScore):
-                    mutation = 1
+                    mutation = 0.7
                 else:
                     mutation = 0.5
                 dna.Mutate(mutation, self.__hints)

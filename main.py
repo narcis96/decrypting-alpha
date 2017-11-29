@@ -8,8 +8,8 @@ import numpy as np
 from collections import Counter
 from Population import Population
 from  math import log2
-ALPHA = 'abcdefghijklmnopqstuvwxyz'
 from thread import ThreadPool
+IMPORTANT_ALPHA = 'abcdefghilmnopqstuv'
 def UniqueWords(fromFile, toFile):
     with open(fromFile, 'r') as f:
         listWords = [line[:-1] for line in f]
@@ -67,25 +67,20 @@ def GetHints(file):
             hints[ord(li[0]) - ord('a')] = ord(li[1]) - ord('a')
     return hints
 def CreateDict(words, encoded):
-    lengths = [len(word) for word in encoded]
     wordsDict = Counter(words)
-    newDict, newCost, cost = {}, {}, {}
+    newDict = {}
     print('Creating dict...')
     bar = progressbar.ProgressBar(maxval=len(wordsDict))
-    #                for new in list(itertools.combinations([alpha for alpha in ALPHA if alpha not in word], k))[0:100]:
     for indx,word in enumerate(wordsDict):
-        wordLen, wordCost = len(word), log2(len(word))
-#        if wordLen not in lengths:
-#            continue
-        cost[word] = wordCost
+        wordLen = len(word)
         wordsDict[word] = wordLen
         for k in range(1, 4):
-            for old in list(itertools.combinations(set(word), k)):
-                permutedAlpha = [alpha for alpha in ALPHA if alpha not in word]
-                to = list(itertools.combinations([alpha for alpha in ALPHA if alpha not in word], k))
-                for new in to:
-                    for j in range(k):
-                        newWord = word.replace(old[j], new[j])
+            for old in (itertools.combinations(set(word), k)):
+                for comb in (itertools.combinations([alpha for alpha in IMPORTANT_ALPHA if alpha not in word], k)):
+                    for new in itertools.permutations(comb):
+                        newWord = word
+                        for j in range(k):
+                            newWord = newWord.replace(old[j], new[j])
                         currentCost = 0
                         for i in range(wordLen):
                             x = abs(ord(newWord[i])  - ord(word[i]) + 1)
@@ -93,20 +88,14 @@ def CreateDict(words, encoded):
                             currentCost = currentCost + pow(x, 2)
                         if newWord not in newDict:
                             newDict[newWord] = currentCost
-                            newCost[newWord] = wordCost
                         else:
                             newDict[newWord] = min(newDict[newWord], currentCost)
-                            newCost[newWord] = min(newCost[newWord], wordCost)
-
         bar.update(indx + 1)
     bar.finish()
-    for word in newDict:
-        if word not in wordsDict:
-            wordsDict[word] = newDict[word]
-            cost[word] = newCost[word]
+    for word in wordsDict:
+        newDict[word] = wordsDict[word]
     print('dict created...')
-
-    return wordsDict, cost
+    return newDict
 
 def work(x, y):
     print (x, y)
@@ -120,10 +109,6 @@ if __name__ == '__main__':
     #exit(0)
     with open('./param.json') as data_file:
         params = json.load(data_file)
-    with open('wordsDict-most-used.json') as data_file:
-        wordsDict = json.load(data_file)
-    with open('wordsCost-most-used.json') as data_file:
-        cost = json.load(data_file)
     #UniqueWords('./data/words-list.txt','./data/words-list-unique.txt')
     #SaveSenteses('./data/Newspapers', './data/sentences.txt')
     #SaveUniqueWords(sentences, './data/words-from-sentences-unique.txt')
@@ -141,16 +126,20 @@ if __name__ == '__main__':
     count, length, mutation = params['population'], params['length'], params['mutation']
     words = mostused# + smallList# + bigList
     words = [x for x in words if 'y' not in x and 'k' not in x]
-    words = [word for word in words if len(word) >= 2 ]#and len(word) <= max(len(word) for word in encoded)]
-
+    words = [word for word in words if len(word) >= 2 ]
     if params['create-dict']:
-        wordsDict, cost = CreateDict(words, encoded)
-    with open('wordsDict-most-used.json', 'w') as outfile:
-        json.dump(wordsDict, outfile)
-    with open('wordsCost-most-used.json', 'w') as outfile:
-        json.dump(cost, outfile)
-    #exit(0)
-
+        wordsDict = CreateDict(words, encoded)
+        with open('wordsDict-most-used.json', 'w') as outfile:
+            print('Writing dict...')
+            json.dump(wordsDict, outfile)
+    else:
+        with open('wordsDict-most-used.json') as data_file:
+            print('Reading dict...')
+            wordsDict = json.load(data_file)
+#    print(wordsDict['linistit'])
+#    print(wordsDict['linisaia'])
+#    print(wordsDict['lbnbsaba'])
+#    exit(0)
 
     for key in hints:
         print(chr(key+ord('a')), chr(hints[key]+ord('a')))
@@ -160,10 +149,6 @@ if __name__ == '__main__':
     print('population: ', count)
     print('length: ', length)
     print('mutation: ', mutation*100, '%')
-    #print(wordsDict['finiwdid'])
-
-    #exit(0)
-
 #    decoded = ['afara', 'ninge', 'linistit']
     '''
     decoded = ['romanii', 'au', 'fost', 'simpli']
@@ -173,14 +158,14 @@ if __name__ == '__main__':
     score = pow(score, 2)
     print('score to rich :',score)
     for word in decoded:
-        print(wordsDict[word], cost[word])
+        print(wordsDict[word])
 '''
     if params['random'] == True:
         print('Generate ', count, ' random samples')
-        population = Population.Random(params['threads'], count, length, mutation, encoded, cost, wordsDict, hints)
+        population = Population.Random(params['threads'], count, length, mutation, encoded, wordsDict, hints)
     else:
         print ('continue with folder ', params['continue'])
-        population = Population.FromFolder(params['threads'], params['continue'], count, length, mutation, encoded, cost, wordsDict, hints)
+        population = Population.FromFolder(params['threads'], params['continue'], count, length, mutation, encoded, wordsDict, hints)
     
     while True:
         scores = population.CalcFitness()

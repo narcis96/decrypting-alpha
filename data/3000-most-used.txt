@@ -717,7 +717,6 @@ intra
 cheama
 frica
 mii
-george
 acestei
 mici
 sfarsit
@@ -725,7 +724,6 @@ schimbat
 unu
 munca
 perioada
-ah
 vechi
 voastra
 deoarece
@@ -755,7 +753,6 @@ trage
 uneori
 ajung
 sunteti
-baiat
 saptamani
 clar
 pur
@@ -830,8 +827,6 @@ gresit
 totii
 carte
 spuna
-michael
-david
 mor
 astept
 stati
@@ -1671,7 +1666,6 @@ puna
 roman
 cazuri
 situatie
-com
 bei
 consiliului
 lunii
@@ -1689,7 +1683,6 @@ oferi
 ascunde
 lucrul
 unchiule
-victor
 regulile
 numeste
 prietena
@@ -1697,7 +1690,6 @@ mancarea
 distruge
 articolul
 bunica
-ion
 guvernului
 scena
 ocupa
